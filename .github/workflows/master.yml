@@ -23,14 +23,11 @@ jobs:
       - name: Available platforms
         run: echo ${{ steps.buildx.outputs.platforms }}
 
-      - name: Run Buildx
-        run: |
-          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --output "type=image,push=false" --tag "pakalucki/proxy:latest" --file Dockerfile .
-
-      - name: Publish
-        if: success()
-        uses: manusa/actions-publish-docker@master
+      - name: Docker login
         with:
-          name: pakalucki/proxy
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and deploy
+        run: |
+          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 --tag "pakalucki/proxy:latest" --file Dockerfile --push .
