@@ -24,6 +24,7 @@ jobs:
         run: echo ${{ steps.buildx.outputs.platforms }}
 
       - name: Docker login
+        uses: azure/docker-login@v1
         with:
           username: ${{ secrets.DOCKER_HUB_USER }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
